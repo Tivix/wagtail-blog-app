@@ -15,9 +15,9 @@ Quick start
 
 2. Configure required settings:
 
-WAGTAIL_BLOG_AUTHOR_PAGE = 'team.TeamMemberPage'  # your wagtail page model with author information
-
-WAGTAIL_BLOG_POSTS_PER_PAGE = 10  # posts per page on the post listing page
+  WAGTAIL_BLOG_AUTHOR_PAGE = 'team.TeamMemberPage'  # your wagtail page model with author information
+  
+  WAGTAIL_BLOG_POSTS_PER_PAGE = 10  # posts per page on the post listing page
 
 3. Templates
 
