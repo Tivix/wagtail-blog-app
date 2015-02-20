@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% load wagtailimages_tags wagtailcore_tags %}
+
+{% block body_id %}blog_index{% endblock %}
+
+{% block footer_scripts %}
+<script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>
+{% endblock %}
+
+{% block body %}
+
+    <div id="intro">
+        <div class="headline">
+            <h1>{{ self.headline|safe }}</h1>
+            <div class="gradient-overlay"></div>
+        </div>
+    </div>
+
+    {% for blog in blogs %}
+
+      <article class="blog-post blog-post-preview {% if blog.image %}has-image{% else %}has-no-image{% endif %}">
+        {% if blog.image %}
+            <div class="blog-post-image-preview">
+                <a href="{{ blog.url }}">
+                    {% image blog.image max-256x256 %}
+                </a>
+            </div>
+        {% endif %}
+		<div class="blog-post-body-preview">
+			<h1 class="blog-post-title"><a href="{{ blog.url }}">{{ blog.title }}</a></h1>
+			<p class="blog-post-byline">By {% if blog.author.last_name == "Carmichael" %}"Eric"{% else %}{{ blog.author.first_name }}{% endif %} {{ blog.author.last_name }}</p>
+			<p class="blog-post-date">{{ blog.date|date:"n/j/y" }}</p>
+            {% include 'fragments/tags.html' with blog_post=blog %}
+			<div class="blog-post-content">
+                {{ blog.content|richtext|truncatewords_html:110 }}
+                <a class="blog-post-read-more" href="{{ blog.url }}">Read more &raquo;</a>
+            </div>
+            <div class="gradient-overlay"></div>
+		</div>
+
+	</article>
+
+    {% endfor %}
+
+{% include 'fragments/paginator.html' %}
+
+{% endblock %}

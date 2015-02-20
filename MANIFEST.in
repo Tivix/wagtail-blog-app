@@ -1,0 +1,2 @@
+include README.rst
+recursive-include wagtail_blog/templates *

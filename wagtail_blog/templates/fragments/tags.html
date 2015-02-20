@@ -1,0 +1,10 @@
+{% with blog_post.tags.all as tags %}
+    {% if tags %}
+        {# <div class="page-header"><h3>Tags</h3></div> #}
+        <div class="tag-container">
+        {% for tag in tags %}
+            <a href="{{ blog_post.blog_index.url }}?tag={{ tag }}"><button class="btn btn-primary tag" type="button">{{ tag }}</button></a>
+        {% endfor %}
+        </div>
+    {% endif %}
+{% endwith %}
