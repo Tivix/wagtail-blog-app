@@ -1,13 +1,19 @@
-<div class="blog-pagination-container">
-    <div class="blog-pagination">
+<nav>
+    <ul class="pager">
         {% if blogs.has_previous %}
-            <a class="blog-prev" href="?page={{ blogs.previous_page_number }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&amp;{{ key }}={{ value }}{% endifnotequal %}{% endfor %}">Newer Posts</a>
+            <li class="previous">
+                <a href="?page={{ blogs.previous_page_number }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&amp;{{ key }}={{ value }}{% endifnotequal %}{% endfor %}">
+                    Newer Posts
+                </a>
+            </li>
         {% endif %}
-        <!-- <div class="col-sm-4 pages">
-            Page {{ blogs.number }} of {{ blogs.paginator.num_pages }}
-        </div> -->
         {% if blogs.has_next %}
-            <a class="blog-next" href="?page={{ blogs.next_page_number }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&amp;{{ key }}={{ value }}{% endifnotequal %}{% endfor %}">Older Posts</a>
+            <li class="next">
+                <a href="?page={{ blogs.next_page_number }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&amp;{{ key }}={{ value }}{% endifnotequal %}{% endfor %}">
+                    Older Posts
+                </a>
+            </li>
         {% endif %}
-    </div>
-</div>
+    </ul>
+    Page {{ blogs.number }} of {{ blogs.paginator.num_pages }}
+</nav>

@@ -1,9 +1,13 @@
-{% extends 'base.html' %}
+{% load wagtailimages_tags wagtailcore_tags %}
 
-{% load wagtailimages_tags %}
-{% load wagtailcore_tags %}
-
-{% block meta_description %}{{ self.content|safe|striptags|slice:':150' }}{% endblock %}
+<!-- NOTE: add 'meta_description', 'fb_meta_tags', and 'twitter_meta_tags' to the <head> of your base template -->
+{% block meta_description %}
+    {% if self.search_description %}
+        {{ self.search_description }}
+    {% else %}
+        {{ self.content|striptags|truncatechars:250 }}
+    {% endif %}
+{% endblock %}
 
 {% block fb_meta_tags %}
     <meta property="og:title" content="{{ self.title }}" />
@@ -12,57 +16,42 @@
     {% if self.image %}
         <meta property="og:image" content="http://{{ request.META.HTTP_HOST  }}{{ self.image.file.url }}" />
     {% else %}
-        <meta property="og:image" content="{{ STATIC_URL }}global/images/favicon-192x192.png" />
+        <!-- Default sharing image here -->
+        <meta property="og:image" content="" />
     {% endif %}
-    <meta property="og:site_name" content="Tivix" />
-    <meta property="fb:admins" content="1116133191" />
-    <meta property="og:description" content="{{ self.content|safe|striptags|slice:'250' }}"/>
+    <meta property="og:site_name" content="" />
+    <meta property="fb:admins" content="" />
+    <meta property="og:description" content="{{ self.content|striptags|truncatechars:250 }}"/>
 {% endblock %}
 
 {% block twitter_meta_tags %}
 	<meta name="twitter:card" content="summary">
 	<meta name="twitter:url" content="{{ request.build_absolute_uri }}?ref=twitter">
 	<meta name="twitter:title" content="{{ self.title }}">
-	<meta name="twitter:description" content="{{ self.content|safe|striptags|slice:'250' }}">
+	<meta name="twitter:description" content="{{ self.content|striptags|truncatechars:250 }}">
     {% if self.image %}
         <meta property="twitter:image" content="http://{{ request.META.HTTP_HOST  }}{{ self.image.file.url }}" />
     {% else %}
-		<meta property="og:image" content="{{ STATIC_URL }}global/images/favicon-192x192.png" />
+        <!-- Default sharing image here -->
+		<meta property="og:image" content="" />
     {% endif %}
 {% endblock %}
 
-{% block title %}{{ self.title }}{% endblock %}
+<article>
+    <header>
+        <h1>{{ self.title }}</h1>
+		<p><a href="{{ self.author.url }}">{{ blog.author.first_name }} {{ blog.author.last_name }}</a> | {{ self.date|date:"n/j/y" }}</p>
+    </header>
+    {% image self.image max-400x400 %}
 
-{% block body_id %}blog_post{% endblock %}
+    {{ self.content|richtext }}
 
-{% block footer_scripts %}
-<script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>
-{% endblock %}
+    <div class="post-share">
+        <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri }}" target="_blank">facebook</a>
+        <a href="http://www.linkedin.com/shareArticle?mini=true&url={{ request.build_absolute_uri }}&title={{ self.title }}&summary={{ self.content|safe|striptags|slice:'250' }}&source=Tivix.com" target="_blank">linkedin</a>
+        <a href="https://twitter.com/share?url={{ request.build_absolute_uri|urlencode }}&original_referer={{ request.build_absolute_uri|urlencode }}&text=From the Tivix.com blog: {{ self.title }}" target="_blank">twitter</a>
+    </div>
 
-{% block body %}
-<article class="blog-post {% if self.image %}has-image{% else %}has-no-image{% endif %}">
-	<div class="blog-post-image">
-		{% image self.image max-400x400 %}
-	</div>
-	<div class="blog-post-body">
-		<h1 class="blog-post-title">{{ self.title }}</h1>
-		<p class="blog-post-byline">by <a href="{{ self.author.url }}">{{ blog.author.first_name }} {{ blog.author.last_name }}</a></p>
-		<p class="blog-post-date">{{ self.date|date:"n/j/y" }}</p>
-		<div class="post-share">
-			<h4>Share:</h4>
-			<a href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri }}" target="_blank"><i class="fa fa-facebook-square"></i></a>
-			<a href="http://www.linkedin.com/shareArticle?mini=true&url={{ request.build_absolute_uri }}&title={{ self.title }}&summary={{ self.content|safe|striptags|slice:'250' }}&source=Tivix.com" target="_blank"><i class="fa fa-linkedin-square"></i></a>
-			<a href="https://twitter.com/share?url={{ request.build_absolute_uri|urlencode }}&original_referer={{ request.build_absolute_uri|urlencode }}&text=From the Tivix.com blog: {{ self.title }}" target="_blank"><i class="fa fa-twitter-square"></i></a>
-		</div>
-		{{ self.body }}
-        {% include 'fragments/tags.html' with blog_post=self %}
-		<div>{{ self.content|richtext }}</div>
-		<footer class="blog-post-footer">
-			<h3>About the author</h3>
-			<p class="blog-post-footer-byline">{% if self.author.last_name == "Carmichael" %}"Eric"{% else %}{{ self.author.first_name }}{% endif %} {{ self.author.last_name }}</p>
-			<p><a href="{{ self.author.url }}">{% image self.author.image fill-120x120 %}</a>{{ self.author.bio | truncatewords:30 | safe }} <a href="{{ self.author.url }}">Read more</a></p>
-		</footer>
-	</div>
+    {% include 'fragments/tags.html' with blog_post=self %}
+
 </article>
-
-{% endblock %}

@@ -1,13 +1,9 @@
-from django.contrib import admin
-
 from wagtail.wagtailadmin.edit_handlers import FieldPanel
 from wagtail.wagtailimages.edit_handlers import ImageChooserPanel
 
 from models import BlogPage, BlogIndexPage
 
-# Register your models here.
 
-# Add your Wagtail panels here.
 BlogIndexPage.content_panels = [
     FieldPanel('title', classname="full title"),
     FieldPanel('headline'),

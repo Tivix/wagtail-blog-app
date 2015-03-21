@@ -2,7 +2,7 @@
 Wagtail Blog
 =====
 
-Simple Blog app to plugin into your wagtail setup.
+Simple Blog app to plug in to your Wagtail setup.
 
 Quick start
 -----------
@@ -21,4 +21,4 @@ Quick start
 
 3. Templates
 
-The root of your template path should contain blog_page.html and blog_index_page.html files in wagtail_blog catalog.
+  The root of your template path should contain blog_page.html and blog_index_page.html files in wagtail_blog catalog.
