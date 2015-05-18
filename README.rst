@@ -2,7 +2,7 @@
 Wagtail Blog
 =====
 
-Simple Blog app to plugin into your wagtail setup.
+Simple Blog app to plug in to your Wagtail setup.
 
 Quick start
 -----------
