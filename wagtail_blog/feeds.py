@@ -12,7 +12,7 @@ class BlogPostRSSFeed(Feed):
     description = getattr(settings, 'WAGTAIL_BLOG_FEED_DESCRIPTION', 'Blog Post Feed')
 
     def items(self):
-        return BlogPage.objects.live().order_by('-date')[:50]
+        return BlogPage.objects.live().order_by('-date')[:getattr(settings, 'WAGTAIL_BLOG_FEED_LENGTH', 50)]
 
     def item_title(self, item):
         return item.title

@@ -21,9 +21,11 @@ Quick start
 
   Optional settings include:
 
-  WAGTAIL_BLOG_FEED_TITLE = 'My Site Feed'  # RSS / Atom feed custom title
+  WAGTAIL_BLOG_FEED_TITLE = 'My Site Feed'  # RSS / Atom feed custom title, defaults to RSS Feed / Atom Feed
 
-  WAGTAIL_BLOG_FEED_DESCRIPTION = 'News Feed of My Site'  # RSS / Atom feed custom description
+  WAGTAIL_BLOG_FEED_DESCRIPTION = 'News Feed of My Site'  # RSS 2.0 / Atom feed custom description, defaults to Blog Post Feed
+
+  WAGTAIL_BLOG_FEED_LENGTH = 50  # How many articles are included in the feed, defaults to 50
 
 3. Templates
 
