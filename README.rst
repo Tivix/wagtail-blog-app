@@ -22,3 +22,7 @@ Quick start
 3. Templates
 
 The root of your template path should contain blog_page.html and blog_index_page.html files in wagtail_blog catalog.
+
+4. RSS / Atom Feeds
+
+Feeds module of the application contains appropriate feed classes (how to add feed classes into your URL conf - https://docs.djangoproject.com/en/1.7/ref/contrib/syndication/#a-simple-example )

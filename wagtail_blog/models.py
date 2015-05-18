@@ -37,6 +37,9 @@ class BlogPage(Page):
     def blog_index(self):
         return self.get_ancestors().type(BlogIndexPage).last()
 
+    def get_absolute_url(self):
+        return self.full_url
+
 
 class BlogIndexPage(Page):
     subpage_types = ['BlogPage']
