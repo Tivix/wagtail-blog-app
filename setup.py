@@ -8,7 +8,7 @@ os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
  
 setup(
     name='wagtail_blog',
-    version='0.1',
+    version='0.1.0',
     packages=['wagtail_blog'],
     include_package_data=True,
     description='Simple wagtail blog.',

@@ -19,6 +19,12 @@ Quick start
 
   WAGTAIL_BLOG_POSTS_PER_PAGE = 10  # posts per page on the post listing page
 
+  Optional settings include:
+
+  WAGTAIL_BLOG_FEED_TITLE = 'My Site Feed'  # RSS / Atom feed custom title
+
+  WAGTAIL_BLOG_FEED_DESCRIPTION = 'News Feed of My Site'  # RSS / Atom feed custom description
+
 3. Templates
 
 The root of your template path should contain blog_page.html and blog_index_page.html files in wagtail_blog catalog.

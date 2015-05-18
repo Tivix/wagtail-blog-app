@@ -2,13 +2,14 @@ import re
 
 from django.contrib.syndication.views import Feed
 from django.utils.feedgenerator import Atom1Feed
+from django.conf import settings
 
 from models import BlogPage
 
 
 class BlogPostRSSFeed(Feed):
-    title = 'RSS Feed'
-    description = ''
+    title = getattr(settings, 'WAGTAIL_BLOG_FEED_TITLE', 'RSS Feed')
+    description = getattr(settings, 'WAGTAIL_BLOG_FEED_DESCRIPTION', 'Blog Post Feed')
 
     def items(self):
         return BlogPage.objects.live().order_by('-date')[:50]
@@ -19,12 +20,12 @@ class BlogPostRSSFeed(Feed):
     def item_description(self, item):
         desc = re.compile(r'<.*?>').sub('', item.content)
         if len(desc) > 250:
-            desc = desc[250] + '...'
+            desc = desc[:250] + '...'
 
         return desc
 
 
 class BlogPostAtomFeed(BlogPostRSSFeed):
-    title = 'Atom Feed'
+    title = getattr(settings, 'WAGTAIL_BLOG_FEED_TITLE', 'Atom Feed')
     feed_type = Atom1Feed
     subtitle = BlogPostRSSFeed.description
