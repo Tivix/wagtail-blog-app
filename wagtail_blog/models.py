@@ -1,16 +1,18 @@
+from datetime import date, datetime
+
 from django.db import models
 from django.db.models import Count
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.conf import settings
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.http import Http404
 
-from wagtail.wagtailcore.models import Page
 from wagtail.wagtailcore.fields import RichTextField
+from wagtail.wagtailcore.models import Page
+from wagtail.wagtailcore.url_routing import RouteResult
 
 from modelcluster.fields import ParentalKey
 from modelcluster.tags import ClusterTaggableManager
-
-from taggit.models import TaggedItemBase
-from datetime import date, datetime
+from taggit.models import Tag, TaggedItemBase
 
 
 # This model is enough so that the HomePage model can
@@ -60,6 +62,39 @@ class BlogPage(Page):
 class BlogIndexPage(Page):
     subpage_types = ['BlogPage']
     headline = models.CharField(max_length=255, blank=True, null=True)
+
+
+    def route(self, request, path_components):
+
+        if path_components:
+            """
+            Customized to correctly route legacy blog posts with too long slugs.
+            Additionally customized handle tags url
+            """
+            if path_components[0] == 'tags':
+                # If first component is "tags", we handle that tag
+                # URL for tags is /blog/tags/tag_name
+                tag_slug = path_components[1]
+
+                # Check if Tag with given name exists, if not raise 404.
+                try:
+                    tag = Tag.objects.get(slug__iexact=tag_slug)
+                except Tag.DoesNotExist:
+                    raise Http404
+
+                if self.live:
+                    return RouteResult(self, kwargs={"tag": tag})
+
+                # if not components nor it's live
+                raise Http404
+
+            else:
+                # If the first component is not "tags", handle legacy blog slug
+                # Legacy blog posts have slugs with max_length=255 so we need
+                # to make them compatible with new Wagtail's 50 chars limit.
+                path_components[0] = path_components[0][:50]
+
+        return super(BlogIndexPage, self).route(request, path_components)
 
     @property
     def blogs(self):

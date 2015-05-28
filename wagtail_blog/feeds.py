@@ -4,7 +4,7 @@ from django.contrib.syndication.views import Feed
 from django.utils.feedgenerator import Atom1Feed
 from django.conf import settings
 
-from models import BlogPage
+from wagtail_blog.models import BlogPage
 
 
 class BlogPostRSSFeed(Feed):

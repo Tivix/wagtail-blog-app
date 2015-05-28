@@ -10,11 +10,12 @@ The goal is not to try and become Wordpress or have all its features (or even im
 Quick start
 -----------
 
-1. Add "wagtail_blog" to INSTALLED_APPS:
-  `INSTALLED_APPS = {
+1. Add `wagtail_blog` to `INSTALLED_APPS`:
+  INSTALLED_APPS = {
     ...
     'wagtail_blog'
-  }`
+    ...
+  }
 
 2. Configure settings:
 

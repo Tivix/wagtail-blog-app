@@ -4,6 +4,7 @@ from wagtail.wagtailimages.edit_handlers import ImageChooserPanel
 from models import BlogPage, BlogIndexPage
 
 
+# Add your Wagtail panels here.
 BlogIndexPage.content_panels = [
     FieldPanel('title', classname="full title"),
     FieldPanel('headline'),
