@@ -20,7 +20,8 @@ class BlogPageTag(TaggedItemBase):
 
 class BlogPage(Page):
     content = RichTextField()
-    author = models.ForeignKey(settings.WAGTAIL_BLOG_AUTHOR_PAGE, blank=True, null=True)
+    author = models.ForeignKey(
+        settings.WAGTAIL_BLOG_AUTHOR_PAGE, blank=True, null=True)
 
     image = models.ForeignKey(
         'wagtailimages.Image',
@@ -61,7 +62,9 @@ class BlogIndexPage(Page):
 
         # Pagination
         page = request.GET.get('page')
-        paginator = Paginator(blogs, settings.WAGTAIL_BLOG_POSTS_PER_PAGE)
+        paginator = Paginator(blogs,
+            getattr(settings, 'WAGTAIL_BLOG_POSTS_PER_PAGE', 10))
+
         try:
             blogs = paginator.page(page)
         except PageNotAnInteger:

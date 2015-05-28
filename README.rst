@@ -17,9 +17,9 @@ Quick start
 
   WAGTAIL_BLOG_AUTHOR_PAGE = 'team.TeamMemberPage'  # your wagtail page model with author information
 
-  WAGTAIL_BLOG_POSTS_PER_PAGE = 10  # posts per page on the post listing page
-
   Optional settings include:
+
+  WAGTAIL_BLOG_POSTS_PER_PAGE = 10  # posts per page on the post listing page
 
   WAGTAIL_BLOG_FEED_TITLE = 'My Site Feed'  # RSS / Atom feed custom title, defaults to RSS Feed / Atom Feed
 
