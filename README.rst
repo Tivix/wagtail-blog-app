@@ -2,18 +2,21 @@
 Wagtail Blog
 =====
 
-Simple Blog app to plug in to your Wagtail setup.
+Simple Blog app to plug in to your Wagtail (Django powered CMS) setup/project.
+
+The goal is not to try and become Wordpress or have all its features (or even import/export to it!), but be an extremely simple and powerful blogging app to get your Django/Wagtail blog started.
+
 
 Quick start
 -----------
 
 1. Add "wagtail_blog" to INSTALLED_APPS:
-  INSTALLED_APPS = {
+  `INSTALLED_APPS = {
     ...
     'wagtail_blog'
-  }
+  }`
 
-2. Configure required settings:
+2. Configure settings:
 
   WAGTAIL_BLOG_AUTHOR_PAGE = 'team.TeamMemberPage'  # your wagtail page model with author information
 

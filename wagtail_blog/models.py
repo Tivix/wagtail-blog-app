@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import Count
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.conf import settings
 
@@ -41,6 +42,20 @@ class BlogPage(Page):
     def get_absolute_url(self):
         return self.full_url
 
+    @property
+    def related_blogs(self):
+        # Get all tags associated with this post
+        tags = self.tags.all()
+
+        # Get objects which share tags, count the number they share
+        matches = BlogPage.objects.filter(tags__in=tags).annotate(Count('title'))
+        matches = matches.exclude(pk=self.pk)
+
+        # Return up to 5 results
+        related = matches.order_by('-title__count')[:5]
+
+        return related
+
 
 class BlogIndexPage(Page):
     subpage_types = ['BlogPage']
@@ -52,11 +67,9 @@ class BlogIndexPage(Page):
         blogs = blogs.order_by('-date')
         return blogs
 
-    def get_context(self, request):
-
+    def get_context(self, request, tag=None):
         blogs = self.blogs
 
-        tag = request.GET.get('tag')
         if tag:
             blogs = blogs.filter(tags__name=tag)
 
