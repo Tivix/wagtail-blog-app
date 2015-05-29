@@ -1,0 +1,12 @@
+{% with blog_post.related_blogs as related_posts %}
+    {% if related_posts %}
+        <div class="related-container tag-container">
+            <div class="gradient-overlay"></div>
+            <p>Related Posts:</p>
+            {% for related_post in related_posts %}
+            <a href="{{ related_post.url }}" class='tag'>{{ related_post }}</a>
+            <br>
+        {% endfor %}
+        </div>
+    {% endif %}
+{% endwith %}
