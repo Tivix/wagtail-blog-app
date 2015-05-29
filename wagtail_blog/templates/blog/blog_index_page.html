@@ -18,7 +18,7 @@
 
             <section>
                 <p>By {{ blog.author.first_name }} {{ blog.author.last_name }} | { blog.date|date:"n/j/y" }}</p>
-                {% include 'fragments/tags.html' with blog_post=blog %}
+                {% include 'wagtail_blog/fragments/tags.html' with blog_post=blog %}
             </section>
 
             {{ blog.content|richtext|truncatewords_html:110 }}
@@ -28,7 +28,7 @@
         </article>
     {% endfor %}
 
-    {% include 'fragments/paginator.html' %}
+    {% include 'wagtail_blog/fragments/paginator.html' %}
 </main>
 
 {% endblock %}
