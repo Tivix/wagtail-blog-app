@@ -4,7 +4,7 @@ from django.contrib.syndication.views import Feed
 from django.utils.feedgenerator import Atom1Feed
 from django.conf import settings
 
-from wagtail_blog.models import BlogPage
+from wagtail_blog.models import BlogPost
 
 
 class BlogPostRSSFeed(Feed):
@@ -12,7 +12,7 @@ class BlogPostRSSFeed(Feed):
     description = getattr(settings, 'WAGTAIL_BLOG_FEED_DESCRIPTION', 'Blog Post Feed')
 
     def items(self):
-        return BlogPage.objects.live().order_by('-date')[:getattr(settings, 'WAGTAIL_BLOG_FEED_LENGTH', 50)]
+        return BlogPost.objects.live().order_by('-date')[:getattr(settings, 'WAGTAIL_BLOG_FEED_LENGTH', 50)]
 
     def item_title(self, item):
         return item.title

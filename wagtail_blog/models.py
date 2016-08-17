@@ -14,17 +14,19 @@ from modelcluster.fields import ParentalKey
 from modelcluster.tags import ClusterTaggableManager
 from taggit.models import Tag, TaggedItemBase
 
+from wagtail_blog.utils import get_blog_author_model
+
 
 # This model is enough so that the HomePage model can
 # include a page chooser for the featured blog post
-class BlogPageTag(TaggedItemBase):
-    content_object = ParentalKey('BlogPage', related_name='tagged_items')
+class BlogPostTag(TaggedItemBase):
+    content_object = ParentalKey('BlogPost', related_name='tagged_items')
 
 
-class BlogPage(Page):
+class BlogPost(Page):
     content = RichTextField()
     author = models.ForeignKey(
-        settings.WAGTAIL_BLOG_AUTHOR_PAGE, blank=True, null=True)
+        get_blog_author_model(), blank=True, null=True)
 
     image = models.ForeignKey(
         'wagtailimages.Image',
@@ -33,7 +35,7 @@ class BlogPage(Page):
         on_delete=models.SET_NULL,
         related_name='+'
     )
-    tags = ClusterTaggableManager(through=BlogPageTag, blank=True)
+    tags = ClusterTaggableManager(through=BlogPostTag, blank=True)
     date = models.DateTimeField("Post date", default=date.today)
     date_updated = models.DateTimeField(default=datetime.now)
 
@@ -50,7 +52,7 @@ class BlogPage(Page):
         tags = self.tags.all()
 
         # Get objects which share tags, count the number they share
-        matches = BlogPage.objects.filter(tags__in=tags).annotate(Count('title'))
+        matches = BlogPost.objects.filter(tags__in=tags).annotate(Count('title'))
         matches = matches.exclude(pk=self.pk)
 
         # Return up to 5 results
@@ -60,9 +62,8 @@ class BlogPage(Page):
 
 
 class BlogIndexPage(Page):
-    subpage_types = ['BlogPage']
+    subpage_types = ['BlogPost']
     headline = models.CharField(max_length=255, blank=True, null=True)
-
 
     def route(self, request, path_components):
 
@@ -98,7 +99,7 @@ class BlogIndexPage(Page):
 
     @property
     def blogs(self):
-        blogs = BlogPage.objects.live().descendant_of(self)
+        blogs = BlogPost.objects.live().descendant_of(self)
         blogs = blogs.order_by('-date')
         return blogs
 
@@ -110,8 +111,7 @@ class BlogIndexPage(Page):
 
         # Pagination
         page = request.GET.get('page')
-        paginator = Paginator(blogs,
-            getattr(settings, 'WAGTAIL_BLOG_POSTS_PER_PAGE', 10))
+        paginator = Paginator(blogs, getattr(settings, 'WAGTAIL_BLOG_POSTS_PER_PAGE', 10))
 
         try:
             blogs = paginator.page(page)
