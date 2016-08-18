@@ -1,7 +1,7 @@
 from wagtail.wagtailadmin.edit_handlers import FieldPanel
 from wagtail.wagtailimages.edit_handlers import ImageChooserPanel
 
-from models import BlogPost, BlogIndexPage
+from wagtail_blog.models import BlogPost, BlogIndexPage
 
 
 BlogIndexPage.content_panels = [
