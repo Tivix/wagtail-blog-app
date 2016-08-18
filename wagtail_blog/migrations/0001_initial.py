@@ -10,6 +10,8 @@ import modelcluster.contrib.taggit
 import modelcluster.fields
 import wagtail.wagtailcore.fields
 
+from wagtail_blog.utils import get_blog_author_model
+
 
 class Migration(migrations.Migration):
 
@@ -41,7 +43,7 @@ class Migration(migrations.Migration):
                 ('content', wagtail.wagtailcore.fields.RichTextField()),
                 ('date', models.DateTimeField(default=datetime.date.today, verbose_name=b'Post date')),
                 ('date_updated', models.DateTimeField(default=datetime.datetime.now)),
-                ('author', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to=settings.AUTH_USER_MODEL)),
+                ('author', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to=get_blog_author_model())),
                 ('image', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to='wagtailimages.Image')),
             ],
             options={
