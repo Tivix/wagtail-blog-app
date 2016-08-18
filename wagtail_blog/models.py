@@ -17,8 +17,6 @@ from taggit.models import Tag, TaggedItemBase
 from wagtail_blog.utils import get_blog_author_model
 
 
-# This model is enough so that the HomePage model can
-# include a page chooser for the featured blog post
 class BlogPostTag(TaggedItemBase):
     content_object = ParentalKey('BlogPost', related_name='tagged_items')
 
@@ -26,8 +24,11 @@ class BlogPostTag(TaggedItemBase):
 class BlogPost(Page):
     content = RichTextField()
     author = models.ForeignKey(
-        get_blog_author_model(), blank=True, null=True)
-
+        get_blog_author_model(),
+        blank=True,
+        null=True,
+        on_delete=models.SET_NULL
+    )
     image = models.ForeignKey(
         'wagtailimages.Image',
         null=True,
@@ -35,9 +36,17 @@ class BlogPost(Page):
         on_delete=models.SET_NULL,
         related_name='+'
     )
-    tags = ClusterTaggableManager(through=BlogPostTag, blank=True)
-    date = models.DateTimeField("Post date", default=date.today)
-    date_updated = models.DateTimeField(default=datetime.now)
+    tags = ClusterTaggableManager(
+        through=BlogPostTag,
+        blank=True
+    )
+    date = models.DateTimeField(
+        "Post date",
+        default=date.today
+    )
+    date_updated = models.DateTimeField(
+        default=datetime.now
+    )
 
     @property
     def blog_index(self):
@@ -69,8 +78,7 @@ class BlogIndexPage(Page):
 
         if path_components:
             """
-            Customized to correctly route legacy blog posts with too long slugs.
-            Additionally customized handle tags url
+            Handle tag urls
             """
             if path_components[0] == 'tags':
                 # If first component is "tags", we handle that tag
@@ -86,14 +94,8 @@ class BlogIndexPage(Page):
                 if self.live:
                     return RouteResult(self, kwargs={"tag": tag})
 
-                # if not components nor it's live
+                # if neither components nor live
                 raise Http404
-
-            else:
-                # If the first component is not "tags", handle legacy blog slug
-                # Legacy blog posts have slugs with max_length=255 so we need
-                # to make them compatible with new Wagtail's 50 chars limit.
-                path_components[0] = path_components[0][:50]
 
         return super(BlogIndexPage, self).route(request, path_components)
 
@@ -121,5 +123,8 @@ class BlogIndexPage(Page):
             blogs = paginator.page(paginator.num_pages)
 
         context = super(BlogIndexPage, self).get_context(request)
+        context['on_tag_page'] = True if tag else False
+        context['tag'] = tag
+        context['blogs'] = blogs
         context['blogs'] = blogs
         return context

@@ -7,28 +7,23 @@
 <main>
     {% for blog in blogs %}
         <article>
-
-            <h2><a href="{{ blog.url }}">{{ blog.title }}</a></h2>
-
             {% if blog.image %}
-                <a href="{{ blog.url }}">
-                    {% image blog.image max-256x256 %}
-                </a>
+                <figure>
+                    <a href="{{ blog.url }}">
+                        {% image blog.image max-256x256 %}
+                    </a>
+                </figure>
             {% endif %}
-
-            <section>
+            <header>
+                <h2><a href="{{ blog.url }}">{{ blog.title }}</a></h2>
                 <p>By {{ blog.author.first_name }} {{ blog.author.last_name }} | { blog.date|date:"n/j/y" }}</p>
                 {% include 'wagtail_blog/fragments/tags.html' with blog_post=blog %}
-            </section>
-
+            </header>
             {{ blog.content|richtext|truncatewords_html:110 }}
-
             <a href="{{ blog.url }}">Read more...</a>
-
         </article>
     {% endfor %}
 
     {% include 'wagtail_blog/fragments/paginator.html' %}
 </main>
 
-{% endblock %}

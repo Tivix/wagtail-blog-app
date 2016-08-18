@@ -8,15 +8,15 @@ os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 
 setup(
     name='wagtail-blog-app',
-    version='0.1.2',
+    version='0.2.0',
     packages=find_packages(),
     include_package_data=True,
     keywords = "django wagtail blog app tivix",
-    description='Simple wagtail blog for your Django project.',
+    description='Simple blog app for your Django Wagtail project.',
     long_description=README,
     install_requires=[
         'Django>=1.7.0',
-        'wagtail>=0.8',
+        'wagtail>=1.0',
     ],
     url='http://www.tivix.com/',
     author='Sumit Chachra',

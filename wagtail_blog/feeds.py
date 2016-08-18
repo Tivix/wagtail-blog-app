@@ -8,8 +8,9 @@ from wagtail_blog.models import BlogPost
 
 
 class BlogPostRSSFeed(Feed):
-    title = getattr(settings, 'WAGTAIL_BLOG_FEED_TITLE', 'RSS Feed')
-    description = getattr(settings, 'WAGTAIL_BLOG_FEED_DESCRIPTION', 'Blog Post Feed')
+    title = getattr(settings, 'WAGTAIL_BLOG_FEED_TITLE', "RSS Feed")
+    link = getattr(settings, 'WAGTAIL_BLOG_FEED_LINK', "/blog/"),
+    description = getattr(settings, 'WAGTAIL_BLOG_FEED_DESCRIPTION', "Blog Post Feed")
 
     def items(self):
         return BlogPost.objects.live().order_by('-date')[:getattr(settings, 'WAGTAIL_BLOG_FEED_LENGTH', 50)]
@@ -23,6 +24,9 @@ class BlogPostRSSFeed(Feed):
             desc = desc[:250] + '...'
 
         return desc
+
+    def item_link(self, item):
+        return item.url
 
 
 class BlogPostAtomFeed(BlogPostRSSFeed):
